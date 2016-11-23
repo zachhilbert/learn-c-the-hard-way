@@ -1,0 +1,6 @@
+*.swp
+ex
+*.db
+*.dSYM
+*.o
+*.bin
