@@ -9,7 +9,9 @@ cc -Wall -g ex25.c -o ex
 ```
 
 
-`make SRC=<file to compile>
+`make SRC=<file to compile>`
+```
 $ make SRC=logfind
 rm -rf logfind
-cc -Wall -g logfind.c -o logfind`
+cc -Wall -g logfind.c -o logfind
+```
