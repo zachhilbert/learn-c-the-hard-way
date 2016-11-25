@@ -1,10 +1,19 @@
 CFLAGS=-Wall -g
 
+exnum=${EXNUM}
+ifneq ($(exnum), )
+	file=ex${EXNUM}.c
+	outfile=ex
+else
+	file=${SRC}.c
+	outfile=${SRC}
+endif
+
 all: clean code
 
 clean:
-	rm -rf ex
+	rm -rf $(outfile)
 
 code:
-	cc $(CFLAGS) ex${EXNUM}.c -o ex
+	cc $(CFLAGS) $(file) -o $(outfile)
 

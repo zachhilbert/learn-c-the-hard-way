@@ -4,3 +4,4 @@ ex
 *.dSYM
 *.o
 *.bin
+.logfind
