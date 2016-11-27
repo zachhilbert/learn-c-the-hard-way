@@ -3,5 +3,6 @@ ex
 *.db
 *.dSYM
 *.o
+*.so
 *.bin
 .logfind

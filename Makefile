@@ -16,4 +16,3 @@ clean:
 
 code:
 	cc $(CFLAGS) $(file) -o $(outfile)
-

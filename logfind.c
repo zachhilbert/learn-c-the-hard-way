@@ -12,16 +12,6 @@ struct Logfiles {
     char **files;
 };
 
-long get_filesize(FILE *f)
-{
-    int rc = fseek(f, 0, SEEK_END);
-    check(rc == 0, "File read error");
-    return ftell(f);
-
-error:
-    return -1;
-}
-
 int get_term_count(char **terms, size_t count)
 {
     int total = 0;
@@ -82,7 +72,7 @@ int get_logfiles(struct Logfiles *logs)
 {
     char *line = NULL;
     char *copy = NULL;
-    int glob_count = 0;
+    int glob_flags = GLOB_DOOFFS;
     int rc = 0;
     size_t len = 0;
     ssize_t read;
@@ -101,17 +91,11 @@ int get_logfiles(struct Logfiles *logs)
         line[strcspn(line, "\n")] = 0;
         if ( strstr(line, "*") != NULL )
         {
-            if ( glob_count == 0 )
-            {
-                rc = glob(line, GLOB_DOOFFS, NULL, &globbuf);
-            }
-            else
-            {
-                rc = glob(line, GLOB_DOOFFS | GLOB_APPEND, NULL, &globbuf);
-            }
+            // make glob append if after the first time
+            if(globbuf.gl_pathc > 0) glob_flags |= GLOB_APPEND;
 
-            check(rc == 0, "Converting glob %s to files failed", line);
-            glob_count++;
+            rc = glob(line, glob_flags, NULL, &globbuf);
+            check(rc == 0 || rc == GLOB_NOMATCH, "Converting glob %s to files failed", line);
         }
         else
         {
@@ -124,7 +108,7 @@ int get_logfiles(struct Logfiles *logs)
         }
     }
 
-    if ( logs->count < MAX_LOG_FILES && glob_count > 0 )
+    if ( logs->count < MAX_LOG_FILES && globbuf.gl_pathc > 0 )
     {
         for ( int i = 0; i < globbuf.gl_pathc; i++ )
         {
