@@ -6,3 +6,6 @@ ex
 *.so
 *.bin
 .logfind
+*.a
+*_tests
+*.log
